@@ -1,40 +1,33 @@
-import React from 'react';
-import './App.css';
+/*
+In the previous iteration of this todo list app, we pulled in todos data from a JSON file and mapped over it to display the todo items.
 
-// import TodoItem from './Components/Todoitem';
-// import ContactCard from './Components/ContactCard';
-import Joke from "./Components/Joke"
-import jokesData from "./Data/jokes-data"
+Eventually we'll want to be able to modify the data, which will only happen if we've "loaded" the data in to the component's state
 
+Challenge: Change the <App /> component into a stateful class component and load the imported `todosData` into state.
+*/
 
-function App() {
+import React, {Component} from "react";
+import TodoItem from "./Components/Todoitem";
+import todosData from "./Data/todos-data";
 
-  const jokeComponents = jokesData.map(joke => {
-    return <Joke key={joke.id} question={joke.question} punchLine={joke.punchLine} />
-  })
+class App extends Component {
 
-  return (
-    <div>
-      {jokeComponents}
-    </div>
-  )
-  
-  // var styles = {
-  //   color : "blue",
-  //   backgroundColor : "pink"
-  // };
+  constructor() {
+    super()
+    this.state = {
+        todos: todosData
+    }
+  }
 
-  // return (
-  //   <div className="App">
-  //     <h1 style={styles} >Todos</h1>
-  //     <ContactCard 
-  //       name="Nate Finch"
-  //       imgUrl="http://placekitten.com/300/200"
-  //       phone="123-123-1234"
-  //       email="cat@cats.com"
-  //     />
-  //   </div>
-  // );
+  render() {
+    const todoItems = this.state.todos.map(item => <TodoItem key={item.id} item={item}/>)
+      
+    return (
+        <div className="todo-list">
+            {todoItems}
+        </div>
+    )
+  }
 }
 
-export default App;
+export default App
