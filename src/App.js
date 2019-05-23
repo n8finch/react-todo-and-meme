@@ -1,26 +1,40 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
+// import TodoItem from './Components/Todoitem';
+// import ContactCard from './Components/ContactCard';
+import Joke from "./Components/Joke"
+import jokesData from "./Data/jokes-data"
+
+
 function App() {
+
+  const jokeComponents = jokesData.map(joke => {
+    return <Joke key={joke.id} question={joke.question} punchLine={joke.punchLine} />
+  })
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {jokeComponents}
     </div>
-  );
+  )
+  
+  // var styles = {
+  //   color : "blue",
+  //   backgroundColor : "pink"
+  // };
+
+  // return (
+  //   <div className="App">
+  //     <h1 style={styles} >Todos</h1>
+  //     <ContactCard 
+  //       name="Nate Finch"
+  //       imgUrl="http://placekitten.com/300/200"
+  //       phone="123-123-1234"
+  //       email="cat@cats.com"
+  //     />
+  //   </div>
+  // );
 }
 
 export default App;
