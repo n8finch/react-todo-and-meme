@@ -19,22 +19,25 @@ class App extends React.Component {
         super()
         this.state = {
             isLoading: false,
+            newTodo: "",
             todos: todosData,
             swapi: {}
         }
         this.handleChange = this.handleChange.bind(this)
+        this.handleInput = this.handleInput.bind(this)
+        this.handleSubmit = this.handleSubmit.bind(this)
     }
 
     componentDidMount() {
         this.setState({
             isLoading: true
         });
-        fetch("https://swapi.co/api/people/4")
+        fetch("https://reqres.in/api/users/2")
             .then(response => response.json())
             .then(data => {
                 this.setState({
                     isLoading: false,
-                    swapi: data
+                    swapi: data.data
                 });
             });
     }
@@ -55,16 +58,48 @@ class App extends React.Component {
             }
         });
     }
+
+    handleInput(event) {
+
+        this.setState({
+            [event.target.name]: event.target.value
+        });
+
+        // Another way to do this to handle all forms:
+        // const {name, value, type, checked} = event.target
+        // type === "checkbox" ? this.setState({ [name]: checked }) : this.setState({ [name]: value })
+
+    }
+
+    handleSubmit(event) {
+        event.preventDefault();
+        
+        this.state.todos.push({
+            id: this.state.todos.length + 1,
+            text: this.state.newTodo,
+            completed: false
+        });
+    }
     
     render() {
         const todoItems = this.state.todos.map(item => <TodoItem handleChange={this.handleChange} key={item.id} item={item}/>)
         
-        let heading = (this.state.isLoading) ? <p>Loading...</p> : this.state.swapi.name + "'s Todo List";
+        let heading = (this.state.isLoading) ? <p>Loading...</p> : this.state.swapi.first_name + "'s Todo List";
 
         return (
             <div>
                 <h1 style={{textAlign: "center"}}>{heading}</h1>
+
                 <div className="todo-list">
+                    <form onSubmit={this.handleSubmit}>
+                        <input 
+                            type="text" 
+                            name="newTodo" 
+                            placeholder="New todo item..." 
+                            onChange={this.handleInput} 
+                            value={this.state.newTodo}  />
+                        <button onClick={this.handleSubmit}>Add Item</button>
+                    </form>
                     {todoItems}
                 </div>
             </div>
