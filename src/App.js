@@ -18,9 +18,25 @@ class App extends React.Component {
     constructor() {
         super()
         this.state = {
-            todos: todosData
+            isLoading: false,
+            todos: todosData,
+            swapi: {}
         }
         this.handleChange = this.handleChange.bind(this)
+    }
+
+    componentDidMount() {
+        this.setState({
+            isLoading: true
+        });
+        fetch("https://swapi.co/api/people/4")
+            .then(response => response.json())
+            .then(data => {
+                this.setState({
+                    isLoading: false,
+                    swapi: data
+                });
+            });
     }
     
     handleChange(id) {
@@ -43,9 +59,14 @@ class App extends React.Component {
     render() {
         const todoItems = this.state.todos.map(item => <TodoItem handleChange={this.handleChange} key={item.id} item={item}/>)
         
+        let heading = (this.state.isLoading) ? <p>Loading...</p> : this.state.swapi.name + "'s Todo List";
+
         return (
-            <div className="todo-list">
-                {todoItems}
+            <div>
+                <h1 style={{textAlign: "center"}}>{heading}</h1>
+                <div className="todo-list">
+                    {todoItems}
+                </div>
             </div>
         )    
     }
